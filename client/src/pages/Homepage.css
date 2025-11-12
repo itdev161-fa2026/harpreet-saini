@@ -1,0 +1,62 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .create-post-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #61dafb;
+    color: #282c34;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .create-post-button:hover {
+    background-color: #21a1c4;
+  }
+  
+  .auth-message {
+    color: #666;
+    font-size: 1rem;
+  }
+  
+  .auth-message a {
+    color: #61dafb;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  .auth-message a:hover {
+    text-decoration: underline;
+  }
+  
+  .loading,
+  .error {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 3rem;
+  }
+  
+  .no-posts {
+    text-align: center;
+    margin-top: 3rem;
+    color: #666;
+  }
+  
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+  }
+  

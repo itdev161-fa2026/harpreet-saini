@@ -1,38 +1,66 @@
+// src/services/api.js
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api";
-const api = axios.create({ baseURL: API_URL });
+// Create axios instance
+const api = axios.create({
+  baseURL: "http://localhost:5000/api",
+});
 
-// Add token to headers
-api.interceptors.request.use(config => {
+// Automatically attach token to every request
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (token) config.headers["x-auth-token"] = token;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
-// Handle 401 errors
-api.interceptors.response.use(
-  res => res,
-  err => {
-    if (err.response?.status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    }
-    return Promise.reject(err);
-  }
-);
+// ------------------------
+// POSTS API
+// ------------------------
 
-// Auth API
-export const registerUser = async (name, email, password) => {
-  const res = await api.post("/users", { name, email, password });
+// Get all posts
+export const getPosts = async () => {
+  const res = await api.get("/posts");
   return res.data;
 };
 
-export const loginUser = async (email, password) => {
-  const res = await api.post("/auth", { email, password });
+// Get single post by ID
+export const getPostById = async (id) => {
+  const res = await api.get(`/posts/${id}`);
   return res.data;
 };
 
-// Posts API
-export const getPosts = async () => (await api.get("/posts")).data;
-export const getPostById = async (id) => (await api.get(`/posts/${id}`)).data;
+// Create a new post
+export const createPost = async (title, body) => {
+  const res = await api.post("/posts", { title, body });
+  return res.data;
+};
+
+// Update a post by ID
+export const updatePost = async (id, title, body) => {
+  const res = await api.put(`/posts/${id}`, { title, body });
+  return res.data;
+};
+
+// Delete a post by ID
+export const deletePost = async (id) => {
+  const res = await api.delete(`/posts/${id}`);
+  return res.data;
+};
+
+// ------------------------
+// TEMPORARY AUTH STUBS
+// ------------------------
+
+// Fake registration
+export const registerUserAPI = async (name, email, password) => {
+  // TODO: replace with real API call when backend ready
+  return { token: "FAKE.JWT.TOKEN" };
+};
+
+// Fake login
+export const loginUserAPI = async (email, password) => {
+  // TODO: replace with real API call when backend ready
+  return { token: "FAKE.JWT.TOKEN" };
+};
