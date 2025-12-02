@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Login.css';
+import { toast } from 'react-hot-toast'; // <- import toast
 
 const Login = ({ onLogin, error: authError }) => {
   const [formData, setFormData] = useState({ email:'', password:'' });
@@ -25,8 +26,14 @@ const Login = ({ onLogin, error: authError }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if(!validateForm()) return;
+
     setLoading(true);
-    await onLogin(email, password);
+    try {
+      await onLogin(email, password); // your login function
+      toast.success("Logged in successfully!"); // <- success toast
+    } catch (err) {
+      toast.error(err.message || "Login failed!"); // <- error toast
+    }
     setLoading(false);
   };
 
@@ -37,15 +44,28 @@ const Login = ({ onLogin, error: authError }) => {
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label>Email</label>
-          <input name="email" value={email} onChange={onChange} className={errors.email?'input-error':''}/>
+          <input
+            name="email"
+            value={email}
+            onChange={onChange}
+            className={errors.email ? 'input-error' : ''}
+          />
           {errors.email && <span className="field-error">{errors.email}</span>}
         </div>
         <div className="form-group">
           <label>Password</label>
-          <input type="password" name="password" value={password} onChange={onChange} className={errors.password?'input-error':''}/>
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={onChange}
+            className={errors.password ? 'input-error' : ''}
+          />
           {errors.password && <span className="field-error">{errors.password}</span>}
         </div>
-        <button disabled={loading}>{loading?'Logging in...':'Login'}</button>
+        <button disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
       </form>
     </div>
   );

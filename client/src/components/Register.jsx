@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import './Register.css';
+import { toast } from 'react-hot-toast'; // <- import toast
+import { useNavigate } from 'react-router-dom';
 
 const Register = ({ onRegister, error: authError }) => {
   const [formData, setFormData] = useState({ name:'', email:'', password:'' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // <- navigate after successful registration
 
   const { name, email, password } = formData;
 
@@ -27,8 +30,15 @@ const Register = ({ onRegister, error: authError }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if(!validateForm()) return;
+
     setLoading(true);
-    await onRegister(name, email, password);
+    try {
+      await onRegister(name, email, password); // <- call your register function
+      toast.success("Registered successfully!"); // <- success toast
+      navigate("/login"); // redirect to login page
+    } catch (err) {
+      toast.error(err.message || "Registration failed!"); // <- error toast
+    }
     setLoading(false);
   };
 
